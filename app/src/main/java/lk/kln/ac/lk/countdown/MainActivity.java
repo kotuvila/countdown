@@ -6,28 +6,40 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
-    private  int counter =100;
+    private int counter = 99;
+    private static final String CURRENT_COUNTER = "counter";
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate(Bundle saveInstanceState) {
+        super.onCreate(saveInstanceState);
         setContentView(R.layout.activity_main);
+        if (saveInstanceState != null) {
+            counter = saveInstanceState.getInt(CURRENT_COUNTER);
+        }
         countDown();
     }
 
-    private void countDown(){
-        final TextView textView = findViewById(R.id.textView2);
+    @Override
+    public void onSaveInstanceState(Bundle saveInstanceState) {
+        super.onSaveInstanceState(saveInstanceState);
+        saveInstanceState.putInt(CURRENT_COUNTER, counter);
+    }
 
-        final Handler handler= new Handler();
+    private void countDown() {
+
+        final Handler handler = new Handler();
         handler.post(new Runnable() {
             @Override
             public void run() {
-
+                final TextView textView = findViewById(R.id.textView2);
                 textView.setText(Integer.toString(counter));
+                //reset the counter
+                if (counter==0){
+                    counter = 99;
+                }
                 counter--;
-                handler.postDelayed(this,1000);
-
+                handler.postDelayed(this, 1000);
             }
         });
-
     }
 }
